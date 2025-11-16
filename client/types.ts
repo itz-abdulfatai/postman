@@ -34,6 +34,7 @@ export interface CollectionType {
   requests: RequestItem[];
   variables?: EnvVar[];
   auth?: AuthConfig;
+  isFavourite?: boolean;
 }
 
 type Folder = {
@@ -96,3 +97,9 @@ type SavedResponse = {
   };
   savedAt: Date;
 };
+
+export interface CollectionItemProps extends hasClass {
+  collection: CollectionType;
+  isActive: boolean;
+  onClick: () => void;
+}

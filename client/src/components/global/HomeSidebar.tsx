@@ -12,6 +12,8 @@ import {
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import SideBarSearchInput from "../home/SideBarSearchInput";
+import { collections } from "../../constants";
+import CollectionItem from "../home/CollectionItem";
 
 const menuItems: {
   name?: string;
@@ -25,7 +27,8 @@ const menuItems: {
 ];
 
 const HomeSidebar = () => {
-  const [panelWidth, setPanelWidth] = useState(290); // width of the right panel
+  const [panelWidth, setPanelWidth] = useState(300); // width of the right panel
+  const [activeCollection, setActiveCollection] = useState(collections[0]);
   const isResizing = useRef(false);
   const startResize = () => {
     isResizing.current = true;
@@ -127,13 +130,32 @@ const HomeSidebar = () => {
             <SideBarSearchInput />
           </div>
           {/* collections list */}
-          <div></div>
+          <div className="py-1">
+            {/* sort based on update at and isFavourite */}
+
+            {collections
+              .sort(
+                (a, b) => a.updatedAt.getSeconds() - b.updatedAt.getSeconds()
+              )
+              .sort((a, b) => Number(b.isFavourite) - Number(a.isFavourite))
+              .map((collection, index) => (
+                <CollectionItem
+                  key={index}
+                  collection={collection}
+                  isActive={collection === activeCollection}
+                  onClick={() => {
+                    if (activeCollection !== collection)
+                      setActiveCollection(collection);
+                  }}
+                />
+              ))}
+          </div>
         </div>
 
         {/* DRAG HANDLE */}
         <div
           onMouseDown={startResize}
-          className="w-3 h-full cursor-e-resize"
+          className="w-0.5 h-full cursor-e-resize hover:bg-dblue"
         ></div>
       </div>
     </aside>

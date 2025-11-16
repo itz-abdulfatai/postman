@@ -15,6 +15,7 @@
   --color-yellow: #c6a65c;
   --color-accent: #fe6c37;
   --color-accent-fade: #feaf91;
+  --color-accent2-fade: #ededed;
   --color-accent-dark: #e05320;
   --color-accent2: #e6e6e6;
 }
@@ -39,6 +40,10 @@ input:focus {
 
   section, main, header, footer {
     @apply max-container
+  }
+
+  button {
+    cursor: pointer;
   }
 }
 

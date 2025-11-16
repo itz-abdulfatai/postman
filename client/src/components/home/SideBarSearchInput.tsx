@@ -12,15 +12,6 @@ const SideBarSearchInput = () => {
         placeholder="Search Collections"
         className="text-xs placeholder:text-xs text-text-tertiary flex-1"
       />
-
-      {/* <div className="flex gap-2   ">
-        <div className="p-0.5 text-text-tertiary bg-secondary rounded-sm text-xs">
-          Ctrl
-        </div>
-        <div className="p-0.5 text-text-tertiary bg-secondary rounded-sm text-xs">
-          k
-        </div>
-      </div> */}
     </div>
   );
 };
