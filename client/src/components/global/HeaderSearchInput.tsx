@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
-export const SearchInput = () => {
+export const HeaderSearchInput = () => {
   return (
     <div className="flexbox gap-1 items-center justify-between rounded-sm gborder border-accent2 p-2 w-60 h-[34px] -translate-x-4  cursor-pointer bg-primary">
       <div className="flexbox gap-1 items-center">

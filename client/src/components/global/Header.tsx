@@ -7,7 +7,7 @@ import {
 import Btn from "./Btn";
 import Avatar from "./Avatar";
 import MultiBtn from "./MultiBtn";
-import { SearchInput } from "./SearchInput";
+import { HeaderSearchInput } from "./HeaderSearchInput";
 
 function Header() {
   return (
@@ -32,7 +32,7 @@ function Header() {
           API Network
         </a>
       </nav>
-      <SearchInput />
+      <HeaderSearchInput />
       <div className="flexbox justify-between w-[286px]">
         <button className=" bg-dblue py-1 px-2 font-semibold rounded-sm flex items-center justify-center text-white text-xs gap-2">
           <UserPlusIcon />

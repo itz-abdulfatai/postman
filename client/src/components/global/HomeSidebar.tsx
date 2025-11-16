@@ -2,6 +2,7 @@ import {
   ClockCounterClockwiseIcon,
   FolderIcon,
   LockIcon,
+  PlusIcon,
   SquareIcon,
   SquaresFourIcon,
   TrashSimpleIcon,
@@ -10,47 +11,37 @@ import {
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import { Link } from "react-router-dom";
+import SideBarSearchInput from "../home/SideBarSearchInput";
 
 const menuItems: {
   name?: string;
   Icon: () => ReactElement<Icon>;
   link: string;
 }[] = [
-  {
-    name: "Collections",
-    link: "/",
-    Icon: () => <TrashSimpleIcon />,
-  },
-  {
-    name: "Environment",
-    link: "/",
-    Icon: () => <SquareIcon />,
-  },
-  {
-    name: "History",
-    link: "/",
-    Icon: () => <ClockCounterClockwiseIcon />,
-  },
-  {
-    name: "Flows",
-    link: "/",
-    Icon: () => <TreeStructureIcon />,
-  },
+  { name: "Collections", link: "/", Icon: () => <TrashSimpleIcon /> },
+  { name: "Environment", link: "/", Icon: () => <SquareIcon /> },
+  { name: "History", link: "/", Icon: () => <ClockCounterClockwiseIcon /> },
+  { name: "Flows", link: "/", Icon: () => <TreeStructureIcon /> },
 ];
-const HomeSidebar = () => {
-  const [panelWidth, setPanelWidth] = useState(300);
-  const isResizing = useRef(false);
 
-  const startResize = () => (isResizing.current = true);
-  const stopResize = () => (isResizing.current = false);
+const HomeSidebar = () => {
+  const [panelWidth, setPanelWidth] = useState(290); // width of the right panel
+  const isResizing = useRef(false);
+  const startResize = () => {
+    isResizing.current = true;
+  };
+  const stopResize = () => {
+    isResizing.current = false;
+  };
 
   const resize = (e: MouseEvent) => {
     if (!isResizing.current) return;
 
-    // Your menu is 80px (w-20)
+    // menu width = 80px (w-20)
     const newWidth = e.clientX - 80;
+    const minWidth = 300;
 
-    setPanelWidth(Math.max(260, newWidth)); // minimum width 260px
+    setPanelWidth(Math.min(Math.max(minWidth, newWidth), 750)); // min width
   };
 
   useEffect(() => {
@@ -61,33 +52,41 @@ const HomeSidebar = () => {
       window.removeEventListener("mouseup", stopResize);
     };
   }, []);
+
+  useEffect(() => {
+    console.clear();
+    console.log(panelWidth);
+  }, [panelWidth]);
+
   return (
-    <aside className=" bg-secondary py-1 h-full flex flex-col border-r border-accent2 w-[360px]">
+    <aside className="bg-secondary h-full flex flex-col border-r border-accent2 w-auto">
       {/* top nav */}
-      <div className="w-full flexbox justify-between px-4 py-1.5 bborder border-accent2">
-        {/* workspace */}
+      <div className="w-full flexbox justify-between pl-4 pr-3 py-1.5 bborder border-accent2">
         <div className="flexbox gap-2">
           <LockIcon />
-          <Link to={""} className="text-xs font-semibold">
-            My Workspace
-          </Link>
+          {panelWidth > 42 && (
+            <Link to="" className="text-xs font-semibold">
+              My Workspace
+            </Link>
+          )}
         </div>
-
-        {/* import/exp */}
-        <div className="flexbox gap-2">
-          <button className="px-2 py-1 text-xs rounded-sm  bg-accent2 font-semibold text-text">
-            New
-          </button>
-          <button className="px-2 py-1 text-xs rounded-sm  bg-accent2 font-semibold text-text-secondary">
-            Import
-          </button>
-        </div>
+        {panelWidth > 143 && (
+          <div className="flexbox gap-2">
+            <button className="px-2 py-1 text-xs rounded-sm bg-accent2 font-semibold text-text">
+              New
+            </button>
+            <button className="px-2 py-1 text-xs rounded-sm bg-accent2 font-semibold text-text-secondary">
+              Import
+            </button>
+          </div>
+        )}
       </div>
-      {/* sidebar */}
-      <div className="flex w-full flex-1">
-        <div className="w-20  border-r border-accent2 p-1 flex justify-between flex-col">
-          {/* menu */}
-          <div className="flex flex-col gap-1 bborder h-fit pb-3 border-accent2">
+
+      {/* body */}
+      <div className="flex w-full flex-1 relative">
+        {/* FIXED LEFT MENU */}
+        <div className="w-20 border-r border-accent2 p-1 flex justify-between flex-col">
+          <div className="flex flex-col gap-1 bborder pb-3 border-accent2">
             {menuItems.map((menuItem, index) => (
               <button
                 key={index}
@@ -100,34 +99,41 @@ const HomeSidebar = () => {
               </button>
             ))}
           </div>
-          {/* middle */}
-          <div className="flex-1 flex flex-col pt-2 ">
-            <button
-              className={`flex flex-col justify-center items-center gap-1 p-2 rounded-sm text-text hover:bg-accent2  h-[52px]
-              }`}
-            >
+
+          <div className="flex-1 flex flex-col pt-2">
+            <button className="flex flex-col justify-center items-center gap-1 p-2 rounded-sm text-text hover:bg-accent2 h-[52px]">
               <SquaresFourIcon />
             </button>
           </div>
-          {/* below extras */}
+
           <div className="flex flex-col">
-            <button
-              className={`flex flex-col justify-center items-center gap-1 p-2 rounded-sm text-text hover:bg-accent2
-              }`}
-            >
+            <button className="flex flex-col justify-center items-center gap-1 p-2 rounded-sm text-text hover:bg-accent2">
               <FolderIcon />
-              <span className=" text-[10px]">Files</span>
-              <span className=" text-[10px] px-1 border border-dblue text-dblue font-semibold rounded-xs">
+              <span className="text-[10px]">Files</span>
+              <span className="text-[10px] px-1 border border-dblue text-dblue font-semibold rounded-xs">
                 BETA
               </span>
             </button>
           </div>
         </div>
 
+        {/* RESIZABLE PANEL */}
+        <div className="h-full py-2.5" style={{ width: panelWidth }}>
+          <div className="flexbox w-full items-start justify-between">
+            <button className="px-2.5 py-1.5 h-full flexbox justify-center">
+              <PlusIcon className=" text-accent2" />
+            </button>
+
+            <SideBarSearchInput />
+          </div>
+          {/* collections list */}
+          <div></div>
+        </div>
+
+        {/* DRAG HANDLE */}
         <div
-          //   className=" flex-1 resize-x min-w-[300px]"
-          className="absolute top-0 right-0 w-1 h-full cursor-col-resize hover:bg-accent2"
           onMouseDown={startResize}
+          className="w-3 h-full cursor-e-resize"
         ></div>
       </div>
     </aside>
