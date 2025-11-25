@@ -103,3 +103,9 @@ export interface CollectionItemProps extends hasClass {
   isActive: boolean;
   onClick: () => void;
 }
+
+export interface RequestItemProps extends hasClass {
+  request: RequestItem;
+  isActive: boolean;
+  onClick: () => void;
+}

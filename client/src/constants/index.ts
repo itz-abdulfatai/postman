@@ -11,7 +11,7 @@ const aiAppTests: CollectionType = {
   requests: [
     {
       id: "req-generate-text",
-      name: "POST generate text",
+      name: "generate text",
       url: "https://api.example.com/ai/generate-text",
       method: "POST",
       headers: {
@@ -25,7 +25,7 @@ const aiAppTests: CollectionType = {
     },
     {
       id: "req-summarize-text",
-      name: "POST summarize text",
+      name: "summarize text",
       url: "https://api.example.com/ai/summarize",
       method: "POST",
       headers: {

@@ -56,10 +56,10 @@ const HomeSidebar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.clear();
-    console.log(panelWidth);
-  }, [panelWidth]);
+  // useEffect(() => {
+  //   console.clear();
+  //   console.log(panelWidth);
+  // }, [panelWidth]);
 
   return (
     <aside className="bg-secondary h-full flex flex-col border-r border-accent2 w-auto">
@@ -93,7 +93,7 @@ const HomeSidebar = () => {
             {menuItems.map((menuItem, index) => (
               <button
                 key={index}
-                className={`flex flex-col justify-center items-center gap-1 p-2 rounded-sm text-text hover:bg-accent2 ${
+                className={`flex flex-col justify-center items-center gap-1 px-2 py-[9px] rounded-sm text-text hover:bg-accent2 ${
                   index === 0 && "bg-accent2"
                 }`}
               >
@@ -103,9 +103,9 @@ const HomeSidebar = () => {
             ))}
           </div>
 
-          <div className="flex-1 flex flex-col pt-2">
-            <button className="flex flex-col justify-center items-center gap-1 p-2 rounded-sm text-text hover:bg-accent2 h-[52px]">
-              <SquaresFourIcon />
+          <div className="flex-1 flex flex-col">
+            <button className="flex flex-col justify-center items-center  p-2 rounded-sm text-text hover:bg-accent2 h-[45px]">
+              <SquaresFourIcon fontSize={20} />
             </button>
           </div>
 
@@ -124,7 +124,7 @@ const HomeSidebar = () => {
         <div className="h-full py-2.5" style={{ width: panelWidth }}>
           <div className="flexbox w-full items-start justify-between">
             <button className="px-2.5 py-1.5 h-full flexbox justify-center">
-              <PlusIcon className=" text-accent2" />
+              <PlusIcon className=" text-text-tertiary" />
             </button>
 
             <SideBarSearchInput />
