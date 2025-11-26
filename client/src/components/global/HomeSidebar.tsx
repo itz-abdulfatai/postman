@@ -10,6 +10,8 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type ReactElement } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setActiveCollection } from "../../store/uiSlice";
 import { Link } from "react-router-dom";
 import SideBarSearchInput from "../home/SideBarSearchInput";
 import { collections } from "../../constants";
@@ -28,7 +30,8 @@ const menuItems: {
 
 const HomeSidebar = () => {
   const [panelWidth, setPanelWidth] = useState(300); // width of the right panel
-  const [activeCollection, setActiveCollection] = useState(collections[0]);
+  const dispatch = useAppDispatch();
+  const activeCollectionId = useAppSelector((s) => s.ui.activeCollectionId);
   const isResizing = useRef(false);
   const startResize = () => {
     isResizing.current = true;
@@ -142,10 +145,10 @@ const HomeSidebar = () => {
                 <CollectionItem
                   key={index}
                   collection={collection}
-                  isActive={collection === activeCollection}
+                  isActive={collection.id === activeCollectionId}
                   onClick={() => {
-                    if (activeCollection !== collection)
-                      setActiveCollection(collection);
+                    if (activeCollectionId !== collection.id)
+                      dispatch(setActiveCollection(collection.id));
                   }}
                 />
               ))}

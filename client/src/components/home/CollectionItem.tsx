@@ -1,5 +1,7 @@
 import { useState, type MouseEvent } from "react";
 import type { CollectionItemProps } from "../../../types";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setActiveRequest, setActiveCollection } from "../../store/uiSlice";
 import {
   CaretDownIcon,
   CaretRightIcon,
@@ -17,7 +19,8 @@ const CollectionItem = ({
   onClick,
 }: CollectionItemProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [activeRequest, setActiveRequest] = useState(collection.requests[0]);
+  const dispatch = useAppDispatch();
+  const activeRequestId = useAppSelector((s) => s.ui.activeRequestId);
 
   const handleExpandRetract = (e: MouseEvent) => {
     console.log(e);
@@ -86,11 +89,11 @@ const CollectionItem = ({
             <RequestItem
               request={request}
               key={index}
-              isActive={request === activeRequest}
+              isActive={request.id === activeRequestId}
               onClick={() => {
-                if (request !== activeRequest) {
-                  setActiveRequest(request);
-                }
+                // when clicking a request we also make its collection active
+                dispatch(setActiveCollection(collection.id));
+                dispatch(setActiveRequest(request.id));
               }}
             />
           ))}
