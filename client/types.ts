@@ -7,6 +7,7 @@ interface hasClass {
 
 export interface BtnProps extends hasClass {
   icon: ReactElement<Icon>;
+  title?: string;
 }
 
 export interface AvatarProps {

@@ -3,7 +3,7 @@ import {
   FolderIcon,
   LockIcon,
   PlusIcon,
-  SquareIcon,
+  SquareLogoIcon,
   SquaresFourIcon,
   TrashSimpleIcon,
   TreeStructureIcon,
@@ -11,10 +11,10 @@ import {
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setActiveCollection } from "../../store/uiSlice";
+import { activateCollection } from "../../store/uiThunks";
 import { Link } from "react-router-dom";
 import SideBarSearchInput from "../home/SideBarSearchInput";
-import { collections } from "../../constants";
+
 import CollectionItem from "../home/CollectionItem";
 
 const menuItems: {
@@ -23,7 +23,7 @@ const menuItems: {
   link: string;
 }[] = [
   { name: "Collections", link: "/", Icon: () => <TrashSimpleIcon /> },
-  { name: "Environment", link: "/", Icon: () => <SquareIcon /> },
+  { name: "Environment", link: "/", Icon: () => <SquareLogoIcon /> },
   { name: "History", link: "/", Icon: () => <ClockCounterClockwiseIcon /> },
   { name: "Flows", link: "/", Icon: () => <TreeStructureIcon /> },
 ];
@@ -32,6 +32,7 @@ const HomeSidebar = () => {
   const [panelWidth, setPanelWidth] = useState(300); // width of the right panel
   const dispatch = useAppDispatch();
   const activeCollectionId = useAppSelector((s) => s.ui.activeCollectionId);
+  const collections = useAppSelector((s) => s.collections.items);
   const isResizing = useRef(false);
   const startResize = () => {
     isResizing.current = true;
@@ -39,6 +40,8 @@ const HomeSidebar = () => {
   const stopResize = () => {
     isResizing.current = false;
   };
+
+  // console.log(useAppSelector((s) => s.collections.items));
 
   const resize = (e: MouseEvent) => {
     if (!isResizing.current) return;
@@ -136,22 +139,17 @@ const HomeSidebar = () => {
           <div className="py-1">
             {/* sort based on update at and isFavourite */}
 
-            {collections
-              .sort(
-                (a, b) => a.updatedAt.getSeconds() - b.updatedAt.getSeconds()
-              )
-              .sort((a, b) => Number(b.isFavourite) - Number(a.isFavourite))
-              .map((collection, index) => (
-                <CollectionItem
-                  key={index}
-                  collection={collection}
-                  isActive={collection.id === activeCollectionId}
-                  onClick={() => {
-                    if (activeCollectionId !== collection.id)
-                      dispatch(setActiveCollection(collection.id));
-                  }}
-                />
-              ))}
+            {collections.map((collection) => (
+              <CollectionItem
+                key={collection.id}
+                collection={collection}
+                isActive={collection.id === activeCollectionId}
+                onClick={() => {
+                  if (activeCollectionId !== collection.id)
+                    dispatch(activateCollection(collection.id));
+                }}
+              />
+            ))}
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import { useState, type MouseEvent } from "react";
 import type { CollectionItemProps } from "../../../types";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setActiveRequest, setActiveCollection } from "../../store/uiSlice";
+import { activateRequest } from "../../store/uiThunks";
 import {
   CaretDownIcon,
   CaretRightIcon,
@@ -23,7 +23,7 @@ const CollectionItem = ({
   const activeRequestId = useAppSelector((s) => s.ui.activeRequestId);
 
   const handleExpandRetract = (e: MouseEvent) => {
-    console.log(e);
+    // console.log(e);
 
     e.stopPropagation();
     setExpanded(!expanded);
@@ -32,14 +32,14 @@ const CollectionItem = ({
   };
   return (
     <div>
-      <button
+      <div
         onClick={() => {
           onClick();
           setExpanded(true);
         }}
         className={
           className +
-          ` w-full px-3.5 py-0.5 flexbox justify-between text-text-tertiary text-xs  group gborder  ${
+          ` w-full px-3.5 py-0.5 flexbox justify-between text-text-tertiary text-xs  group gborder cursor-pointer  ${
             isActive
               ? "bg-accent2 border-accent2 "
               : "hover:bg-accent2-fade hover:border-accent2-fade border-secondary"
@@ -76,7 +76,7 @@ const CollectionItem = ({
             icon={<DotsThreeOutlineIcon />}
           />
         </div>
-      </button>
+      </div>
       {/* requests */}
 
       {expanded && (
@@ -91,9 +91,8 @@ const CollectionItem = ({
               key={index}
               isActive={request.id === activeRequestId}
               onClick={() => {
-                // when clicking a request we also make its collection active
-                dispatch(setActiveCollection(collection.id));
-                dispatch(setActiveRequest(request.id));
+                // when clicking a request make its collection active and set active request
+                dispatch(activateRequest(request.id, collection.id));
               }}
             />
           ))}
