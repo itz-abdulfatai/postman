@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Header from "./components/global/Header";
 import post from "./assets/design/Postman - home.png";
 import { useEffect, useState } from "react";
+import { Footer } from "./components/global/Footer";
 
 function App() {
   const [viewing, setViewing] = useState(true);
@@ -28,6 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>
+      <Footer />
     </>
   );
 }

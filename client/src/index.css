@@ -83,3 +83,16 @@ input:focus {
 @utility testb {
    @apply border border-red-400
 }
+
+
+@utility fbox {
+    @apply flexbox gap-1;
+}
+
+@utility fbox-btn {
+    @apply text-sm text-text-secondary;
+}
+
+@utility fbox-text {
+    @apply text-xs text-text-secondary;
+}

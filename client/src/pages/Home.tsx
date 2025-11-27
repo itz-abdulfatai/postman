@@ -4,6 +4,7 @@ import { useAppSelector } from "../store/hooks";
 import Btn from "../components/global/Btn";
 import { CaretDownIcon, PlusIcon } from "@phosphor-icons/react";
 import EnvironmentSelector from "../components/home/EnvironmentSelector";
+import AgentVariableSideBar from "../components/home/AgentVariableSideBar";
 
 function Home() {
   const activeCollectionId = useAppSelector((s) => s.ui.activeCollectionId);
@@ -26,7 +27,7 @@ function Home() {
   }, [activeCollectionId, activeRequestId]);
 
   return (
-    <div className="flex " style={{ height: "calc(100vh - 50px)" }}>
+    <div className="flex " style={{ height: "calc(100vh - 50px - 25px)" }}>
       <HomeSidebar />
       <main className="flex-1">
         <nav className=" w-full bg-primary border border-b-1.5 border-accent2 flexbox">
@@ -34,7 +35,11 @@ function Home() {
           <div></div>
           <div className="flexbox py-2.5  px-2 flex-1 justify-between">
             <Btn icon={<PlusIcon />} title="Create new Request" />
-            <Btn icon={<CaretDownIcon />} title="Search Tabs" />
+            <Btn
+              icon={<CaretDownIcon />}
+              title="Search Tabs"
+              className="px-1"
+            />
           </div>
           {/* environment selector */}
           <EnvironmentSelector />
@@ -42,6 +47,7 @@ function Home() {
       </main>
 
       {/* agent and variables sidebar */}
+      <AgentVariableSideBar />
     </div>
   );
 }

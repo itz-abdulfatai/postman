@@ -33,12 +33,12 @@ function Header() {
         </a>
       </nav>
       <HeaderSearchInput />
-      <div className="flexbox justify-between w-[286px]">
-        <button className=" bg-dblue py-1 px-2 font-semibold rounded-sm flex items-center justify-center text-white text-xs gap-2">
+      <div className="flexbox justify-between w-[286px] pl-1 gap-3">
+        <button className=" bg-dblue py-1 px-2 font-semibold rounded-sm flex items-center justify-center text-white text-xs gap-0.5">
           <UserPlusIcon />
           <span>Invite</span>
         </button>
-        <div className="flexbox gap-4.5">
+        <div className="flexbox gap-5 flex-1 justify-end">
           <Btn icon={<GearIcon className=" text-text-tertiary" />} />
           <Btn icon={<BellIcon className=" text-text-tertiary" />} />
           <Avatar />

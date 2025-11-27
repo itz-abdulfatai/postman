@@ -36,7 +36,7 @@ const RequestItem = ({ request, isActive, onClick }: RequestItemProps) => {
   return (
     <button
       onClick={onClick}
-      className={` w-full pl-[50px] pr-3.5 py-[5.3px]  flexbox justify-between text-text-tertiary text-xs group testb ${
+      className={` w-full pl-[50px] pr-3.5 py-[5.3px]  flexbox justify-between text-text-tertiary text-xs group  ${
         isActive
           ? "bg-accent2 border-accent2 "
           : "hover:bg-accent2-fade hover:border-accent2-fade border-secondary"
