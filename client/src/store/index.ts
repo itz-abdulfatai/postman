@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import uiReducer from "./uiSlice";
 import collectionsReducer from "./collectionsSlice";
+import tabsReducer from "./tabsSlice";
 
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
     collections: collectionsReducer,
+    tabs: tabsReducer,
   },
 });
 

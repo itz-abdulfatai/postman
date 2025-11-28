@@ -99,6 +99,19 @@ type SavedResponse = {
   savedAt: Date;
 };
 
+export interface TabItem {
+  id: string; // unique tab identifier
+  collectionId: string; // reference to the collection
+  requestId: string; // reference to the request within the collection
+  viewMode: "viewing" | "editing"; // current mode of the tab
+  openedAt: Date; // timestamp when tab was opened
+}
+
+export interface TabsState {
+  tabs: TabItem[]; // array of all open tabs
+  activeTabId: string | null; // id of the currently active tab
+}
+
 export interface CollectionItemProps extends hasClass {
   collection: CollectionType;
   isActive: boolean;
@@ -109,4 +122,11 @@ export interface RequestItemProps extends hasClass {
   request: RequestItem;
   isActive: boolean;
   onClick: () => void;
+}
+
+export interface openTabSmartType {
+  collectionId: string;
+  requestId: string;
+  tabs: TabItem[];
+  activeTabId: string | null;
 }

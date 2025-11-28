@@ -55,7 +55,7 @@ function Home() {
           <main className="flex-1 flexbox flex-col justify-center  w-full">
             <img
               src={Postmann}
-              alt=""
+              alt="Workspace placeholder illustration"
               className="w-[200px] aspect-square mb-11 select-none pointer-events-none"
               draggable={false}
             />
