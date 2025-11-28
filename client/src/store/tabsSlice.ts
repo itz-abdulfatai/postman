@@ -1,74 +1,67 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
-import type { openTabSmartType, TabItem, TabsState } from "../../types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type {
+  TabItem,
+  TabsState,
+  CollectionTab,
+  RequestTab,
+} from "../../types";
 
 const initialState: TabsState = {
   tabs: [],
   activeTabId: null,
 };
 
-/**
- * Smart tab opening thunk that handles the logic:
- * - If the active tab is in viewing mode, replace it with the new tab
- * - Otherwise, add a new tab
- */
-export const openTabSmart = createAsyncThunk(
-  "tabs/openTabSmart",
-  async ({ collectionId, requestId, tabs, activeTabId }: openTabSmartType) => {
-    // Check if a tab already exists for this collection + request combination
-    const existingTab = tabs.find(
-      (tab) => tab.collectionId === collectionId && tab.requestId === requestId
-    );
-
-    // If it exists, just activate it
-    if (existingTab) {
-      return {
-        action: "activate" as const,
-        tabId: existingTab.id,
-      };
-    }
-
-    // Check if active tab is in viewing mode and should be replaced
-    const activeTab = activeTabId
-      ? tabs.find((t) => t.id === activeTabId)
-      : null;
-    const shouldReplace = activeTab && activeTab.viewMode === "viewing";
-
-    return {
-      action: shouldReplace ? ("replace" as const) : ("add" as const),
-      collectionId,
-      requestId,
-      replaceTabId: shouldReplace ? activeTabId : undefined,
-    };
-  }
-);
-
 const tabsSlice = createSlice({
   name: "tabs",
   initialState,
   reducers: {
     /**
-     * Add a new tab to the tabs array and set it as active
+     * Add a collection tab and set it as active
+     * viewMode is always "viewing" for initial tab creation
      */
-    addTab(
+    addCollectionTab(
       state,
       action: PayloadAction<{
         collectionId: string;
-        requestId: string;
       }>
     ) {
       const newTabId = `tab-${Date.now()}-${Math.random()
         .toString(36)
-        .substr(2, 9)}`;
-      const newTab: TabItem = {
+        .slice(2, 9)}`;
+      const newTab: CollectionTab = {
         id: newTabId,
+        type: "collection",
         collectionId: action.payload.collectionId,
-        requestId: action.payload.requestId,
         viewMode: "viewing",
-        openedAt: new Date(),
+        openedAt: new Date().toISOString(),
+      };
+
+      state.tabs.push(newTab);
+      state.activeTabId = newTabId;
+    },
+
+    /**
+     * Add a request tab and set it as active
+     * Includes parent collectionId for context
+     * viewMode is always "viewing" for initial tab creation
+     */
+    addRequestTab(
+      state,
+      action: PayloadAction<{
+        requestId: string;
+        collectionId: string;
+      }>
+    ) {
+      const newTabId = `tab-${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2, 9)}`;
+      const newTab: RequestTab = {
+        id: newTabId,
+        type: "request",
+        requestId: action.payload.requestId,
+        collectionId: action.payload.collectionId,
+        viewMode: "viewing",
+        openedAt: new Date().toISOString(),
       };
 
       state.tabs.push(newTab);
@@ -106,7 +99,7 @@ const tabsSlice = createSlice({
       state,
       action: PayloadAction<{
         tabId: string;
-        updates: Partial<Omit<TabItem, "id">>;
+        updates: Partial<Pick<TabItem, "viewMode">>;
       }>
     ) {
       const tab = state.tabs.find((t) => t.id === action.payload.tabId);
@@ -156,15 +149,13 @@ const tabsSlice = createSlice({
     },
 
     /**
-     * Replace a specific tab with a new one
-     * Used when replacing a viewing-mode tab with a new request
+     * Replace a collection tab with a new one
      */
-    replaceTab(
+    replaceCollectionTab(
       state,
       action: PayloadAction<{
         tabIdToReplace: string;
         collectionId: string;
-        requestId: string;
       }>
     ) {
       const tabIndex = state.tabs.findIndex(
@@ -173,67 +164,60 @@ const tabsSlice = createSlice({
 
       if (tabIndex === -1) return;
 
-      const newTab: TabItem = {
+      const newTab: CollectionTab = {
         id: action.payload.tabIdToReplace,
+        type: "collection",
         collectionId: action.payload.collectionId,
-        requestId: action.payload.requestId,
         viewMode: "viewing",
-        openedAt: new Date(),
+        openedAt: new Date().toISOString(),
+      };
+
+      state.tabs[tabIndex] = newTab;
+      state.activeTabId = action.payload.tabIdToReplace;
+    },
+
+    /**
+     * Replace a request tab with a new one
+     */
+    replaceRequestTab(
+      state,
+      action: PayloadAction<{
+        tabIdToReplace: string;
+        requestId: string;
+        collectionId: string;
+      }>
+    ) {
+      const tabIndex = state.tabs.findIndex(
+        (t) => t.id === action.payload.tabIdToReplace
+      );
+
+      if (tabIndex === -1) return;
+
+      const newTab: RequestTab = {
+        id: action.payload.tabIdToReplace,
+        type: "request",
+        requestId: action.payload.requestId,
+        collectionId: action.payload.collectionId,
+        viewMode: "viewing",
+        openedAt: new Date().toISOString(),
       };
 
       state.tabs[tabIndex] = newTab;
       state.activeTabId = action.payload.tabIdToReplace;
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(openTabSmart.fulfilled, (state, action) => {
-      const { action: smartAction } = action.payload;
-
-      if (smartAction === "activate") {
-        state.activeTabId = action.payload.tabId;
-      } else if (smartAction === "replace") {
-        const replaceTabId = action.payload.replaceTabId;
-        if (!replaceTabId) return;
-
-        const tabIndex = state.tabs.findIndex((t) => t.id === replaceTabId);
-
-        if (tabIndex !== -1) {
-          state.tabs[tabIndex] = {
-            id: replaceTabId,
-            collectionId: action.payload.collectionId,
-            requestId: action.payload.requestId,
-            viewMode: "viewing",
-            openedAt: new Date(),
-          };
-          state.activeTabId = replaceTabId;
-        }
-      } else if (smartAction === "add") {
-        const newTabId = `tab-${Date.now()}-${Math.random()
-          .toString(36)
-          .substr(2, 9)}`;
-        const newTab: TabItem = {
-          id: newTabId,
-          collectionId: action.payload.collectionId,
-          requestId: action.payload.requestId,
-          viewMode: "viewing",
-          openedAt: new Date(),
-        };
-
-        state.tabs.push(newTab);
-        state.activeTabId = newTabId;
-      }
-    });
-  },
 });
 
 export const {
-  addTab,
+  addCollectionTab,
+  addRequestTab,
   removeTab,
   updateTab,
   setActiveTab,
   reorderTabs,
   clearAllTabs,
-  replaceTab,
+  replaceCollectionTab,
+  replaceRequestTab,
 } = tabsSlice.actions;
 
 export default tabsSlice.reducer;

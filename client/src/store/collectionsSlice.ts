@@ -11,7 +11,7 @@ const initialState: CollectionsState = {
   items: sortCollections(
     initialCollections.map((c) => ({
       ...c,
-      updatedAt: new Date(c.updatedAt),
+      updatedAt: new Date(c.updatedAt).toISOString(),
     }))
   ),
 };
@@ -22,7 +22,7 @@ function sortCollections(collections: CollectionType[]): CollectionType[] {
       return Number(b.isFavourite) - Number(a.isFavourite);
     }
 
-    return b.updatedAt.getTime() - a.updatedAt.getTime();
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
   });
 }
 

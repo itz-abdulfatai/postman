@@ -1,7 +1,10 @@
 import { useState, type MouseEvent } from "react";
 import type { CollectionItemProps } from "../../../types";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { activateRequest } from "../../store/uiThunks";
+import {
+  openCollectionTab,
+  openCollectionTabInEditMode,
+} from "../../store/tabsThunks";
 import {
   CaretDownIcon,
   CaretRightIcon,
@@ -16,27 +19,39 @@ const CollectionItem = ({
   collection,
   className,
   isActive,
-  onClick,
 }: CollectionItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
   const activeRequestId = useAppSelector((s) => s.ui.activeRequestId);
 
   const handleExpandRetract = (e: MouseEvent) => {
-    // console.log(e);
-
     e.stopPropagation();
     setExpanded(!expanded);
-
-    // i only have the old value of expanded to work with
   };
+
+  /**
+   * Handle single click on collection
+   * Single click: open collection in viewing mode (tab)
+   */
+  const handleCollectionClick = () => {
+    dispatch(openCollectionTab(collection.id));
+    setExpanded(true);
+  };
+
+  /**
+   * Handle double click on collection
+   * Double click: create/switch to collection tab in editing mode directly
+   */
+  const handleCollectionDoubleClick = () => {
+    dispatch(openCollectionTabInEditMode(collection.id));
+    setExpanded(true);
+  };
+
   return (
     <div>
       <div
-        onClick={() => {
-          onClick();
-          setExpanded(true);
-        }}
+        onDoubleClick={handleCollectionDoubleClick}
+        onClick={handleCollectionClick}
         className={
           className +
           ` w-full px-3.5 py-0.5 flexbox justify-between text-text-tertiary text-xs  group gborder cursor-pointer  ${
@@ -90,10 +105,7 @@ const CollectionItem = ({
               request={request}
               key={index}
               isActive={request.id === activeRequestId}
-              onClick={() => {
-                // when clicking a request make its collection active and set active request
-                dispatch(activateRequest(request.id, collection.id));
-              }}
+              collectionId={collection.id}
             />
           ))}
         </div>

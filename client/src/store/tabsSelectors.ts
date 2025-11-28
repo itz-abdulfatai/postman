@@ -4,7 +4,7 @@
  */
 
 import type { RootState } from "./index";
-import type { TabItem } from "../../types";
+import type { TabItem, RequestTab } from "../../types";
 
 /**
  * Get all tabs from the state
@@ -65,7 +65,10 @@ export const selectTabByCollectionAndRequest = (
   requestId: string
 ): TabItem | null =>
   state.tabs.tabs.find(
-    (tab) => tab.collectionId === collectionId && tab.requestId === requestId
+    (tab): tab is RequestTab =>
+      tab.type === "request" &&
+      tab.collectionId === collectionId &&
+      tab.requestId === requestId
   ) ?? null;
 
 /**
@@ -138,7 +141,7 @@ export const selectPreviousTab = (
  */
 export const selectTabsSortedByRecent = (state: RootState): TabItem[] =>
   [...state.tabs.tabs].sort(
-    (a, b) => b.openedAt.getTime() - a.openedAt.getTime()
+    (a, b) => new Date(b.openedAt).getTime() - new Date(a.openedAt).getTime()
   );
 
 /**

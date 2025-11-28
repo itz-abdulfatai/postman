@@ -3,8 +3,8 @@ import type { CollectionType } from "../../types";
 const aiAppTests: CollectionType = {
   id: "col-ai-app-tests",
   name: "ai app tests",
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   description: "Sample AI endpoints for testing model and inference APIs",
   folders: [],
   variables: [],
@@ -46,8 +46,8 @@ const socialMediaMicroservices: CollectionType = {
   id: "col-social-media-microservices",
   name: "social media app microservices",
 
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   description: "Microservice endpoints for my social media app",
   folders: [],
   variables: [],

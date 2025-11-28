@@ -1,6 +1,8 @@
 import type { ReactElement } from "react";
 import type { Icon } from "@phosphor-icons/react";
 
+export type ISODateString = string;
+
 interface hasClass {
   className?: string;
 }
@@ -24,13 +26,12 @@ export interface SearchInputProps extends hasClass {
   setTyping: (typing: boolean) => void;
 }
 
-
 export interface CollectionType {
   id: string;
   name: string;
   description?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
   folders?: Folder[];
   requests: RequestItem[];
   variables?: EnvVar[];
@@ -96,16 +97,36 @@ type SavedResponse = {
     type: "json" | "text" | "html" | "xml" | "binary";
     value: unknown;
   };
-  savedAt: Date;
+  savedAt: ISODateString;
 };
 
-export interface TabItem {
+/**
+ * Collection Tab - represents an open collection in a tab
+ * type discriminator ensures we know this is a collection tab
+ */
+export interface CollectionTab {
   id: string; // unique tab identifier
-  collectionId: string; // reference to the collection
-  requestId: string; // reference to the request within the collection
+  type: "collection"; // discriminator
+  collectionId: string; // the collection being viewed
   viewMode: "viewing" | "editing"; // current mode of the tab
-  openedAt: Date; // timestamp when tab was opened
+  openedAt: ISODateString; // timestamp when tab was opened
 }
+
+/**
+ * Request Tab - represents an open request in a tab
+ * type discriminator ensures we know this is a request tab
+ */
+export interface RequestTab {
+  id: string; // unique tab identifier
+  type: "request"; // discriminator
+  requestId: string; // the request being viewed
+  collectionId: string; // parent collection (for context and UI sync)
+  viewMode: "viewing" | "editing"; // current mode of the tab
+  openedAt: ISODateString; // timestamp when tab was opened
+}
+
+// Union type - a tab is EITHER a collection OR a request, never both
+export type TabItem = CollectionTab | RequestTab;
 
 export interface TabsState {
   tabs: TabItem[]; // array of all open tabs
@@ -121,10 +142,11 @@ export interface CollectionItemProps extends hasClass {
 export interface RequestItemProps extends hasClass {
   request: RequestItem;
   isActive: boolean;
-  onClick: () => void;
+  onClick?: () => void;
+  collectionId?: string; // parent collection ID for tab operations
 }
 
-export interface openTabSmartType {
+export interface OpenTabSmartType {
   collectionId: string;
   requestId: string;
   tabs: TabItem[];

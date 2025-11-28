@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import SideBarSearchInput from "../home/SideBarSearchInput";
 
 import CollectionItem from "../home/CollectionItem";
+// import { useSelector } from "react-redux";
 
 const menuItems: {
   name?: string;
@@ -41,8 +42,6 @@ const HomeSidebar = () => {
     isResizing.current = false;
   };
 
-  // console.log(useAppSelector((s) => s.collections.items));
-
   const resize = (e: MouseEvent) => {
     if (!isResizing.current) return;
 
@@ -61,6 +60,25 @@ const HomeSidebar = () => {
       window.removeEventListener("mouseup", stopResize);
     };
   }, []);
+
+  // ----------------------------------------------------------------
+  // logger
+  // ----------------------------------------------------------------
+
+  const tabs = useAppSelector((state) => state.tabs.tabs);
+  const activeTabId = useAppSelector((state) => state.tabs.activeTabId);
+
+  useEffect(() => {
+    console.clear();
+    console.log("Tabs changed:", tabs);
+    console.log("Active tab changed:", activeTabId);
+    console.log("all tabs:", JSON.stringify(tabs, null, 2));
+    console.log("tabs count:", tabs.length);
+  }, [tabs, activeTabId]);
+
+  // ----------------------------------------------------------------
+  // end logger
+  // ----------------------------------------------------------------
 
   // useEffect(() => {
   //   console.clear();

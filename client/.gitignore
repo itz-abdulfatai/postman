@@ -11,7 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+# Ignore all markdown
 *.md
+
+# But keep documentation files
+!README.md
+!CONTRIBUTING.md
+!CHANGELOG.md
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

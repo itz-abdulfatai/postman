@@ -22,7 +22,7 @@ function Home() {
     activeCollection?.requests.find((r) => r.id === activeRequestId) ?? null;
 
   useEffect(() => {
-    console.clear();
+    // console.clear();
 
     console.log("Active Collection ID:", activeCollectionId);
     console.log("Active Request ID:", activeRequestId);
