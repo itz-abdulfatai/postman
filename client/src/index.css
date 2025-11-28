@@ -96,3 +96,7 @@ input:focus {
 @utility fbox-text {
     @apply text-xs text-text-secondary;
 }
+
+@utility rq-btns {
+  @apply p-1.5 hover:bg-accent2 rounded-sm opacity-80 hover:opacity-100
+}
