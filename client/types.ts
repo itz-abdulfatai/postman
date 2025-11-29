@@ -6,8 +6,10 @@ export type ISODateString = string;
 interface hasClass {
   className?: string;
 }
+export type AnyFn = (...args: never[]) => unknown;
 
-export interface BtnProps extends hasClass {
+export interface BtnProps<T extends AnyFn = AnyFn> extends hasClass {
+  onClick?: T;
   icon: ReactElement<Icon>;
   title?: string;
 }
@@ -47,7 +49,7 @@ type Folder = {
   folders?: Folder[];
 };
 
-type RequestItem = {
+export type RequestItem = {
   id: string;
   name: string;
   url: string;
@@ -150,5 +152,10 @@ export interface OpenTabSmartType {
   collectionId: string;
   requestId: string;
   tabs: TabItem[];
+  activeTabId: string | null;
+}
+
+export interface TabChipProps extends hasClass {
+  tab: TabItem;
   activeTabId: string | null;
 }

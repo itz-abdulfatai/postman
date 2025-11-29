@@ -61,25 +61,6 @@ const HomeSidebar = () => {
     };
   }, []);
 
-  // ----------------------------------------------------------------
-  // logger
-  // ----------------------------------------------------------------
-
-  const tabs = useAppSelector((state) => state.tabs.tabs);
-  const activeTabId = useAppSelector((state) => state.tabs.activeTabId);
-
-  useEffect(() => {
-    console.clear();
-    console.log("Tabs changed:", tabs);
-    console.log("Active tab changed:", activeTabId);
-    console.log("all tabs:", JSON.stringify(tabs, null, 2));
-    console.log("tabs count:", tabs.length);
-  }, [tabs, activeTabId]);
-
-  // ----------------------------------------------------------------
-  // end logger
-  // ----------------------------------------------------------------
-
   // useEffect(() => {
   //   console.clear();
   //   console.log(panelWidth);

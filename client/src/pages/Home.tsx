@@ -10,6 +10,7 @@ import {
 import EnvironmentSelector from "../components/home/EnvironmentSelector";
 import AgentVariableSideBar from "../components/home/AgentVariableSideBar";
 import Postmann from "../assets/images/posmannn.png";
+import TabChip from "../components/home/TabChip";
 
 function Home() {
   const activeCollectionId = useAppSelector((s) => s.ui.activeCollectionId);
@@ -31,15 +32,35 @@ function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCollectionId, activeRequestId]);
 
+  const tabs = useAppSelector((state) => state.tabs.tabs);
+  const activeTabId = useAppSelector((state) => state.tabs.activeTabId);
+
+  useEffect(() => {
+    // console.clear();
+    console.log("Tabs changed:", tabs);
+    console.log("Active tab changed:", activeTabId);
+    console.log("all tabs:", JSON.stringify(tabs, null, 2));
+    console.log("tabs count:", tabs.length);
+  }, [tabs, activeTabId]);
+
   return (
     <div className="flex " style={{ height: "calc(100vh - 50px - 25px)" }}>
       <HomeSidebar />
       {/* main part */}
       <div className="flex-1 bg-primary  flex flex-col items-stretch">
-        <nav className=" w-full  border border-b-1.5 border-accent2 flexbox">
+        <nav className=" w-full   p-0  flexbox">
           {/* collections tabs */}
-          <div></div>
-          <div className="flexbox py-2.5  px-2 flex-1 justify-between">
+          <div className="flex">
+            {tabs.map((tab, index) => (
+              <>
+                {index > 0 && index < tabs.length && (
+                  <span className=" h-4 place-self-center border-r border-accent2"></span>
+                )}
+                <TabChip tab={tab} activeTabId={activeTabId} />
+              </>
+            ))}
+          </div>
+          <div className="flexbox py-2.5  px-2 flex-1 justify-between border-b border-accent2">
             <Btn icon={<PlusIcon />} title="Create new Request" />
             <Btn
               icon={<CaretDownIcon />}
